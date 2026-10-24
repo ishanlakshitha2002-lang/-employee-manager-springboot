@@ -35,4 +35,11 @@ public class EmployeeService {
     public boolean emailExists(String email) {
         return repository.existsByEmail(email);
     }
+
+    public List<Employee> searchEmployees(String keyword) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            return repository.findByFullNameContainingIgnoreCase(keyword.trim());
+        }
+        return repository.findAll();
+    }
 }

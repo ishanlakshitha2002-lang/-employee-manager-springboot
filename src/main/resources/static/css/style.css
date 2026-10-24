@@ -249,3 +249,19 @@ td.empty {
     color: #6b7280;
     font-size: 0.875rem;
 }
+
+/* Search Form */
+.search-container {
+    margin-bottom: 1.25rem;
+}
+
+.search-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    max-width: 450px;
+}
+
+.search-input {
+    flex: 1;
+}

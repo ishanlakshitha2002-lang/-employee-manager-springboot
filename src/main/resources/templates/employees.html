@@ -76,6 +76,17 @@
             <span class="badge" th:text="${#lists.size(employees)}">0</span>
         </h2>
 
+        <!-- Search Box (Task 11) -->
+        <div class="search-container">
+            <form th:action="@{/employees}" method="get" class="search-form">
+                <input type="text" name="keyword" th:value="${keyword}"
+                       placeholder="Search by name..." class="form-control search-input">
+                <button type="submit" class="btn primary small">Search</button>
+                <a th:href="@{/employees}" class="btn secondary small"
+                   th:if="${keyword != null and keyword != ''}">Clear</a>
+            </form>
+        </div>
+
         <div class="table-wrap">
             <table>
                 <thead>
@@ -92,7 +103,10 @@
 
                 <tbody>
                 <tr th:if="${#lists.isEmpty(employees)}">
-                    <td colspan="7" class="empty">No employees registered yet.</td>
+                    <td colspan="7" class="empty"
+                        th:text="${keyword != null and keyword != ''} ? 'No employees found matching \'' + ${keyword} + '\'' : 'No employees registered yet.'">
+                        No employees registered yet.
+                    </td>
                 </tr>
 
                 <tr th:each="emp : ${employees}">

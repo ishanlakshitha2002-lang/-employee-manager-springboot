@@ -11,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 public class EmployeeController {
 
@@ -26,9 +28,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public String listEmployees(Model model) {
-        model.addAttribute("employees", service.getAllEmployees());
+    public String listEmployees(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
+        List<Employee> employees = (keyword != null && !keyword.trim().isEmpty())
+                ? service.searchEmployees(keyword)
+                : service.getAllEmployees();
+
+        model.addAttribute("employees", employees);
         model.addAttribute("employee", new Employee());
+        model.addAttribute("keyword", keyword);
         return "employees";
     }
 
