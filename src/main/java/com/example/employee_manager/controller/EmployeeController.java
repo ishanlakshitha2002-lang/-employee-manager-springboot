@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class EmployeeController {
@@ -35,7 +36,8 @@ public class EmployeeController {
     public String createEmployee(
             @Valid @ModelAttribute("employee") Employee employee,
             BindingResult result,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute("employees", service.getAllEmployees());
@@ -52,6 +54,7 @@ public class EmployeeController {
         }
 
         service.saveEmployee(employee);
+        redirectAttributes.addFlashAttribute("success", "Employee registered successfully!");
         return "redirect:/employees";
     }
 
@@ -72,7 +75,8 @@ public class EmployeeController {
             @PathVariable Long id,
             @Valid @ModelAttribute("employee") Employee employee,
             BindingResult result,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         Employee existing = service.getEmployeeById(id)
                 .orElseThrow(() ->
@@ -95,12 +99,14 @@ public class EmployeeController {
 
         employee.setId(id);
         service.saveEmployee(employee);
+        redirectAttributes.addFlashAttribute("success", "Employee updated successfully!");
         return "redirect:/employees";
     }
 
     @PostMapping("/employees/{id}/delete")
-    public String deleteEmployee(@PathVariable Long id) {
+    public String deleteEmployee(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         service.deleteEmployee(id);
+        redirectAttributes.addFlashAttribute("success", "Employee deleted successfully!");
         return "redirect:/employees";
     }
 }
